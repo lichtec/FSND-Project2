@@ -23,14 +23,16 @@ def countPlayers():
     """Returns the number of players currently registered."""
 
 
-def registerPlayer(name):
+def registerPlayer(fName, lName, tournamentID=""):
     """Adds a player to the tournament database.
   
     The database assigns a unique serial id number for the player.  (This
     should be handled by your SQL database schema, not in your Python code.)
   
     Args:
-      name: the player's full name (need not be unique).
+      fName: the player's first name (need not be unique).
+	  lName: the player's last name (need not be unique).
+	  tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
     """
 
 
