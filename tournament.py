@@ -80,13 +80,15 @@ def playerStandings():
     """
 
 
-def reportMatch(winner, loser):
+def reportMatch(winner, loser, tournamentID=""):
     """Records the outcome of a single match between two players.
 
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
+	  tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
     """
+	
  
  
 def swissPairings():
