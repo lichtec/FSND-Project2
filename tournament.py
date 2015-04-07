@@ -4,7 +4,9 @@
 #
 
 import psycopg2
-
+deleteStatement = "DELETE FROM {0};"
+countStatement = "SELECT COUNT(*) FROM {0};"
+insertStatement = "INSERT INTO {0} VALUES({1});"
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
@@ -13,14 +15,34 @@ def connect():
 
 def deleteMatches():
     """Remove all the match records from the database."""
+	db = connect()
+	cursor = db.cursor()
+	statement=deleteStatement.format("Matches")
+	cursor.execute(statement)
+	cursor.commit()
+	cursor.close()
+	
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
+	db = connect()
+	cursor = db.cursor()
+	statement=deleteStatement.format("Players")
+	cursor.execute(statement)
+	cursor.commit()
+	cursor.close()
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
+	db = connect()
+	cursor = db.cursor()
+	statement=countStatement.format("Players")
+	cursor.execute(statement)
+	playerCount=cursor.fetchall()
+	cursor.close()
+	return playerCount
 
 
 def registerPlayer(fName, lName, tournamentID=""):
@@ -34,6 +56,13 @@ def registerPlayer(fName, lName, tournamentID=""):
 	  lName: the player's last name (need not be unique).
 	  tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
     """
+	db = connect()
+	cursor = db.cursor()
+	values = fName + ', ' + lName + ', ' + str(tournameID)
+	statement=insertStatement.format("Players", values)
+	cursor.execute(statement)
+	cursor.commit()
+	cursor.close()
 
 
 def playerStandings():
