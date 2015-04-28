@@ -5,8 +5,8 @@
 
 import psycopg2
 deleteStatement = "DELETE FROM {0};"
-countStatement = "SELECT COUNT(*) FROM {0};"
-insertStatement = "INSERT INTO {0} VALUES({1});"
+countStatement = "SELECT COUNT({0}) FROM {1};"
+insertStatement = "INSERT INTO {0} ({1}) VALUES({2});"
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
@@ -38,46 +38,49 @@ def countPlayers():
     """Returns the number of players currently registered."""
     db = connect()
     cursor = db.cursor()
-    statement=countStatement.format("Players")
+    statement=countStatement.format("PlayerID", "Players")
     cursor.execute(statement)
     playerCount=cursor.fetchall()
     cursor.close()
     return playerCount
 
 
-def registerPlayer(fName, lName, tournamentID=""):
+def registerPlayer(PlayerName, tournamentID=""):
     """Adds a player to the tournament database.
   
     The database assigns a unique serial id number for the player.  (This
     should be handled by your SQL database schema, not in your Python code.)
   
     Args:
-      fName: the player's first name (need not be unique).
-      lName: the player's last name (need not be unique).
+      PlayerName: the player's  name (need not be unique).
       tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
 
     """
     db = connect()
     cursor = db.cursor()
-    values = fName + ', ' + lName + ', ' + str(tournameID)
-    statement=insertStatement.format("Players", values)
+    values = PlayerName + ', ' + str(tournameID)
+    statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
     cursor.execute(statement)
     cursor.commit()
     cursor.close()
 	
 def playerStandings():
-     """Returns a list of the players and their win records, sorted by wins.
-
-     The first entry in the list should be the player in first place, or a player
-     tied for first place if there is currently a tie.
-
-     Returns:
-         A list of tuples, each of which contains (id, name, wins, matches):
-         id: the player's unique id (assigned by the database)
-         name: the player's full name (as registered)
-         wins: the number of matches the player has won
-         matches: the number of matches the player has played
-     """
+	"""Returns a list of the players and their win records, sorted by wins.
+	The first entry in the list should be the player in first place, or a player
+	tied for first place if there is currently a tie.
+	Returns:
+		A list of tuples, each of which contains (id, name, wins, matches):
+		id: the player's unique id (assigned by the database)
+		name: the player's full name (as registered)
+		wins: the number of matches the player has won
+		matches: the number of matches the player has played
+	"""
+	
+	db = connect()
+	cursor = db.cursor()
+	cursor.execute("select * from Scores")
+	standings=cursor.fetchall()
+	cursor.close()
 
 
 def reportMatch(winner, loser, tournamentID=""):
