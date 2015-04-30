@@ -91,6 +91,14 @@ def reportMatch(winner, loser, tournamentID=""):
        loser:  the id number of the player who lost
 	  tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
      """
+	 
+	db = connect()
+    cursor = db.cursor()
+    values = winner + ', ' + loser + ', ' str(tournameID)
+    statement=insertStatement.format("Matches", "Winner, Loser, TournamentID", values)
+    cursor.execute(statement)
+    cursor.commit()
+    cursor.close()
 	
 def swissPairings():
      """Returns a list of pairs of players for the next round of a match.
