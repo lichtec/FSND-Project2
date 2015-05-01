@@ -19,7 +19,7 @@ def deleteMatches():
     cursor = db.cursor()
     statement=deleteStatement.format("Matches")
     cursor.execute(statement)
-    cursor.commit()
+    db.commit()
     cursor.close()
 	
 
@@ -30,7 +30,7 @@ def deletePlayers():
     cursor = db.cursor()
     statement=deleteStatement.format("Players")
     cursor.execute(statement)
-    cursor.commit()
+    db.commit()
     cursor.close()
 
 
@@ -38,9 +38,10 @@ def countPlayers():
     """Returns the number of players currently registered."""
     db = connect()
     cursor = db.cursor()
-    statement=countStatement.format("PlayerID", "Players")
+    statement=countStatement.format("*", "Players")
     cursor.execute(statement)
     playerCount=cursor.fetchall()
+    playerCount=playerCount[0][0]
     cursor.close()
     return playerCount
 
@@ -58,7 +59,10 @@ def registerPlayer(PlayerName, tournamentID=""):
     """
     db = connect()
     cursor = db.cursor()
-    values = PlayerName + ', ' + str(tournameID)
+    if tournamentID != "":
+        values = '"' + PlayerName + '"' + ', ' + str(tournamentID)
+    else:
+        values = '"' + PlayerName + '"'
     statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
     cursor.execute(statement)
     cursor.commit()
@@ -84,17 +88,16 @@ def playerStandings():
 
 
 def reportMatch(winner, loser, tournamentID=""):
-     """Records the outcome of a single match between two players.
+    """Records the outcome of a single match between two players.
+        Args:
+            winner:  the id number of the player who won
+            loser:  the id number of the player who lost
+            tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
+    """
 
-     Args:
-       winner:  the id number of the player who won
-       loser:  the id number of the player who lost
-	  tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
-     """
-	 
-	db = connect()
+    db = connect()
     cursor = db.cursor()
-    values = winner + ', ' + loser + ', ' str(tournameID)
+    values = winner + ', ' + loser + ', ' + str(tournameID)
     statement=insertStatement.format("Matches", "Winner, Loser, TournamentID", values)
     cursor.execute(statement)
     cursor.commit()
