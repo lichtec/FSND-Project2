@@ -60,12 +60,14 @@ def registerPlayer(PlayerName, tournamentID=""):
     db = connect()
     cursor = db.cursor()
     if tournamentID != "":
-        values = '"' + PlayerName + '"' + ', ' + str(tournamentID)
+        print "TournamentID"
+        values = "'" + PlayerName + "'" + ', ' + tournamentID
+        statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
     else:
-        values = '"' + PlayerName + '"'
-    statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
+        values = "'" + PlayerName + "', " + "0"
+        statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
     cursor.execute(statement)
-    cursor.commit()
+    db.commit()
     cursor.close()
 	
 def playerStandings():
@@ -97,8 +99,12 @@ def reportMatch(winner, loser, tournamentID=""):
 
     db = connect()
     cursor = db.cursor()
-    values = winner + ', ' + loser + ', ' + str(tournameID)
-    statement=insertStatement.format("Matches", "Winner, Loser, TournamentID", values)
+    if tournamentID != "":
+        values = winner + ', ' + loser + ', ' + tournamentID
+        statement=insertStatement.format("Matches", "Winner, Loser, TournamentID", values)
+    else:
+        values = winner + ', ' + loser
+        statement=insertStatement.format("Matches", "Winner, Loser", values)
     cursor.execute(statement)
     cursor.commit()
     cursor.close()
