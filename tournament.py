@@ -86,7 +86,9 @@ def playerStandings():
 	cursor = db.cursor()
 	cursor.execute("select * from Scores")
 	standings=cursor.fetchall()
+	print standings
 	cursor.close()
+	return standings
 
 
 def reportMatch(winner, loser, tournamentID=""):
