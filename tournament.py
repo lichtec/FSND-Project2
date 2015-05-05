@@ -126,5 +126,17 @@ def swissPairings():
          id2: the second player's unique id
          name2: the second player's name
      """
+	db = connect()
+	cursor = db.cursor()
+	cursor.execute("select * from Scores")
+	standings=cursor.fetchall()
+	print standings
+	matchesList = []
+	for x in standings:
+		player1 = standings.pop(0)
+		for y in standings:
+			if x[1] == y[1]:
+				player2 = standings.pop(standings.index(y))
+				matchesList.append(player1+player2)
 
 
