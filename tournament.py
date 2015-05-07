@@ -62,11 +62,11 @@ def registerPlayer(PlayerName, tournamentID=""):
     if tournamentID != "":
         print "TournamentID"
         values = "'" + PlayerName + "'" + ', ' + tournamentID
-        statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
+        cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, tournamentID))
     else:
         values = "'" + PlayerName + "', " + "0"
-        statement=insertStatement.format("Players", "PlayerName, TournamentID", values)
-    cursor.execute(statement)
+        cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, 0))
+    #cursor.execute(statement)
     db.commit()
     cursor.close()
 	
@@ -126,17 +126,15 @@ def swissPairings():
          id2: the second player's unique id
          name2: the second player's name
      """
-	db = connect()
-	cursor = db.cursor()
-	cursor.execute("select * from Scores")
-	standings=cursor.fetchall()
-	print standings
-	matchesList = []
-	for x in standings:
-		player1 = standings.pop(0)
-		for y in standings:
-			if x[1] == y[1]:
-				player2 = standings.pop(standings.index(y))
-				matchesList.append(player1+player2)
-
-
+     db = connect()
+     cursor = db.cursor()
+     cursor.execute("select * from Scores")
+     standings=cursor.fetchall()
+     print standings
+     matchesList = []
+     for x in standings:
+        player1 = standings.pop(0)
+        for y in standings:
+            if x[1] == y[1]:
+                player2 = standings.pop(standings.index(y))
+                matchesList.append(player1+player2)
