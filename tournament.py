@@ -17,8 +17,7 @@ def deleteMatches():
     """Remove all the match records from the database."""
     db = connect()
     cursor = db.cursor()
-    statement=deleteStatement.format("Matches")
-    cursor.execute(statement)
+    cursor.execute("DELETE FROM Matches;")
     db.commit()
     cursor.close()
 	
@@ -28,8 +27,7 @@ def deletePlayers():
     """Remove all the player records from the database."""
     db = connect()
     cursor = db.cursor()
-    statement=deleteStatement.format("Players")
-    cursor.execute(statement)
+    cursor.execute("DELETE FROM Players;")
     db.commit()
     cursor.close()
 
@@ -38,8 +36,7 @@ def countPlayers():
     """Returns the number of players currently registered."""
     db = connect()
     cursor = db.cursor()
-    statement=countStatement.format("*", "Players")
-    cursor.execute(statement)
+    cursor.execute("SELECT COUNT(PlayerId) FROM Players;")
     playerCount=cursor.fetchall()
     playerCount=playerCount[0][0]
     cursor.close()
@@ -60,11 +57,8 @@ def registerPlayer(PlayerName, tournamentID=""):
     db = connect()
     cursor = db.cursor()
     if tournamentID != "":
-        print "TournamentID"
-        values = "'" + PlayerName + "'" + ', ' + tournamentID
         cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, tournamentID))
     else:
-        values = "'" + PlayerName + "', " + "0"
         cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, 0))
     #cursor.execute(statement)
     db.commit()
@@ -86,7 +80,7 @@ def playerStandings():
 	cursor = db.cursor()
 	cursor.execute("select * from Scores")
 	standings=cursor.fetchall()
-	print standings
+	#print standings
 	cursor.close()
 	return standings
 
@@ -102,13 +96,10 @@ def reportMatch(winner, loser, tournamentID=""):
     db = connect()
     cursor = db.cursor()
     if tournamentID != "":
-        values = winner + ', ' + loser + ', ' + tournamentID
-        statement=insertStatement.format("Matches", "Winner, Loser, TournamentID", values)
+        cursor.execute("INSERT INTO Matches (winner, loser, tournamentID) VALUES(%s, %s, %s);", (winner, loser, tournamentID))
     else:
-        values = winner + ', ' + loser
-        statement=insertStatement.format("Matches", "Winner, Loser", values)
-    cursor.execute(statement)
-    cursor.commit()
+        cursor.execute("INSERT INTO Matches (winner, loser, tournamentID) VALUES(%s, %s, %s);", (winner, loser, 0))
+    db.commit()
     cursor.close()
 	
 def swissPairings():
@@ -130,7 +121,7 @@ def swissPairings():
      cursor = db.cursor()
      cursor.execute("select * from Scores")
      standings=cursor.fetchall()
-     print standings
+     #print standings
      matchesList = []
      for x in standings:
         player1 = standings.pop(0)
@@ -138,3 +129,7 @@ def swissPairings():
             if x[1] == y[1]:
                 player2 = standings.pop(standings.index(y))
                 matchesList.append(player1+player2)
+
+
+
+
