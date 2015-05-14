@@ -4,9 +4,6 @@
 #
 
 import psycopg2
-deleteStatement = "DELETE FROM {0};"
-countStatement = "SELECT COUNT({0}) FROM {1};"
-insertStatement = "INSERT INTO {0} ({1}) VALUES({2});"
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
@@ -60,7 +57,6 @@ def registerPlayer(PlayerName, tournamentID=""):
         cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, tournamentID))
     else:
         cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, 0))
-    #cursor.execute(statement)
     db.commit()
     cursor.close()
 	
@@ -80,7 +76,6 @@ def playerStandings():
 	cursor = db.cursor()
 	cursor.execute("select * from Scores")
 	standings=cursor.fetchall()
-	#print standings
 	cursor.close()
 	return standings
 
@@ -121,16 +116,18 @@ def swissPairings():
      cursor = db.cursor()
      cursor.execute("select * from Scores")
      standings=cursor.fetchall()
-     #print standings
      matchesList = []
-     if(standings.len() % 2 == 0):
-         while(standings.len()>0):
+     if(len(standings) % 2 == 0):
+         while(len(standings)>0):
              player1=standings.pop()
              player2=standings.pop()
-             matchesList.append((player1[0], player1[1], player2[0], player[1]))
-    else:
-        while(standings.len()>1):
+             matchesList.append((player1[0], player1[1], player2[0], player2[1]))
+     else:
+        while(len(standings)>1):
              player1=standings.pop()
              player2=standings.pop()
-             matchesList.append((player1[0], player1[1], player2[0], player[1]))
+             matchesList.append((player1[0], player1[1], player2[0], player2[1]))
         player1=standings.pop()
+        matchesList.append((player1[0], player1[1], 0, 'BI'))
+        reportMatch(player1[0], 0)
+     return matchesList
