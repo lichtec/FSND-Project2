@@ -5,6 +5,7 @@
 --
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
+CREATE DATABASE Tournament;
 
 CREATE TABLE Tournaments
 	(TournamentID serial, TournamentName varchar(254), Sport varchar(254), PRIMARY KEY(TournamentID));
