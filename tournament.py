@@ -123,13 +123,14 @@ def swissPairings():
      standings=cursor.fetchall()
      #print standings
      matchesList = []
-     for x in standings:
-        player1 = standings.pop(0)
-        for y in standings:
-            if x[1] == y[1]:
-                player2 = standings.pop(standings.index(y))
-                matchesList.append(player1+player2)
-
-
-
-
+     if(standings.len() % 2 == 0):
+         while(standings.len()>0):
+             player1=standings.pop()
+             player2=standings.pop()
+             matchesList.append((player1[0], player1[1], player2[0], player[1]))
+    else:
+        while(standings.len()>1):
+             player1=standings.pop()
+             player2=standings.pop()
+             matchesList.append((player1[0], player1[1], player2[0], player[1]))
+        player1=standings.pop()
