@@ -18,4 +18,6 @@ CREATE VIEW Scores AS
 FROM
   Players a left join Matches b on (a.PlayerID=b.Winner)
 Group By a.PlayerID, a.PlayerName
-Order By Wins Desc; 
+Order By Wins Desc;
+
+INSERT INTO Tournaments (TournamentID) Values(0);

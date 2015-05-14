@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # 
 # tournament.py -- implementation of a Swiss-system tournament
-#
+# 
 
 import psycopg2
 
@@ -53,6 +53,7 @@ def registerPlayer(PlayerName, tournamentID=""):
     """
     db = connect()
     cursor = db.cursor()
+    #Different decisiions based on the tournament id. Using 0 as a standard blank tournament that's included in my sql
     if tournamentID != "":
         cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, tournamentID))
     else:
@@ -74,6 +75,7 @@ def playerStandings():
 	
 	db = connect()
 	cursor = db.cursor()
+    #playerStandings utilizes the the scores view to show current standings
 	cursor.execute("select * from Scores")
 	standings=cursor.fetchall()
 	cursor.close()
@@ -90,6 +92,7 @@ def reportMatch(winner, loser, tournamentID=""):
 
     db = connect()
     cursor = db.cursor()
+    #Different decisiions based on the tournament id. Using 0 as a standard blank tournament that's included in my sql
     if tournamentID != "":
         cursor.execute("INSERT INTO Matches (winner, loser, tournamentID) VALUES(%s, %s, %s);", (winner, loser, tournamentID))
     else:
@@ -122,6 +125,7 @@ def swissPairings():
              player1=standings.pop()
              player2=standings.pop()
              matchesList.append((player1[0], player1[1], player2[0], player2[1]))
+     #Code to handle a possible bi
      else:
         while(len(standings)>1):
              player1=standings.pop()
