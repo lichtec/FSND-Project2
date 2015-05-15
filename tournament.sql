@@ -5,20 +5,20 @@
 --
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
-CREATE DATABASE Tournament;
+-- Be sure to have already run CREATE DATABASE Tournament; and then connecting to that DB before running this SQL.
 
-CREATE TABLE Tournaments
-	(TournamentID serial, TournamentName varchar(254), Sport varchar(254), PRIMARY KEY(TournamentID));
-CREATE TABLE Players
-	(PlayerID serial, PlayerName varchar(254), TournamentID serial references Tournaments, PRIMARY KEY(PlayerID));
-CREATE TABLE Matches
-	(MatchID serial, Winner serial references Players, Loser serial references Players, TournamentID integer references Tournaments, PRIMARY KEY(MatchID));
-CREATE VIEW Scores AS
+CREATE TABLE tournaments
+	(tournament_id serial, tournament_name varchar(254), sport varchar(254), PRIMARY KEY(tournament_id));
+CREATE TABLE players
+	(player_id serial, player_name varchar(254) not null, tournament_id serial references tournaments, PRIMARY KEY(player_id));
+CREATE TABLE matches
+	(match_id serial, winner serial references players not null, loser serial references players, tournament_id integer references tournaments, PRIMARY KEY(match_id));
+CREATE VIEW scores AS
 	SELECT
-  a.PlayerID as ID, a.PlayerName, (select count(winner) from matches where winner=a.PlayerID) as Wins, (select count(winner) from matches where winner=a.PlayerID) + (select count(Loser) from matches where Loser=a.PlayerID) as Matches
+  a.player_id as ID, a.player_name, (select count(winner) from matches where winner=a.player_id) as wins, (select count(winner) from matches where winner=a.player_id) + (select count(loser) from matches where Loser=a.player_id) as mathces
 FROM
-  Players a left join Matches b on (a.PlayerID=b.Winner)
-Group By a.PlayerID, a.PlayerName
-Order By Wins Desc;
+  players a left join matches b on (a.player_id=b.winner)
+Group By a.player_id, a.player_name
+Order By wins Desc;
 
-INSERT INTO Tournaments (TournamentID) Values(0);
+INSERT INTO tournaments (tournament_id) Values(0);
