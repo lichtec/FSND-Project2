@@ -17,6 +17,7 @@ def deleteMatches():
     cursor.execute("DELETE FROM Matches;")
     db.commit()
     cursor.close()
+    db.close()
 	
 
 
@@ -27,6 +28,7 @@ def deletePlayers():
     cursor.execute("DELETE FROM Players;")
     db.commit()
     cursor.close()
+    db.close()
 
 
 def countPlayers():
@@ -37,6 +39,7 @@ def countPlayers():
     playerCount=cursor.fetchall()
     playerCount=playerCount[0][0]
     cursor.close()
+    db.close()
     return playerCount
 
 
@@ -60,26 +63,27 @@ def registerPlayer(PlayerName, tournamentID=""):
         cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, 0))
     db.commit()
     cursor.close()
+    db.close()
 	
 def playerStandings():
-	"""Returns a list of the players and their win records, sorted by wins.
-	The first entry in the list should be the player in first place, or a player
-	tied for first place if there is currently a tie.
-	Returns:
-		A list of tuples, each of which contains (id, name, wins, matches):
-		id: the player's unique id (assigned by the database)
-		name: the player's full name (as registered)
-		wins: the number of matches the player has won
-		matches: the number of matches the player has played
-	"""
-	
-	db = connect()
-	cursor = db.cursor()
+    """Returns a list of the players and their win records, sorted by wins.
+        The first entry in the list should be the player in first place, or a player
+        tied for first place if there is currently a tie.
+    Returns:
+        A list of tuples, each of which contains (id, name, wins, matches):
+        id: the player's unique id (assigned by the database)
+        name: the player's full name (as registered)
+        wins: the number of matches the player has won
+        matches: the number of matches the player has played
+    """
+    db = connect()
+    cursor = db.cursor()
     #playerStandings utilizes the the scores view to show current standings
-	cursor.execute("select * from Scores")
-	standings=cursor.fetchall()
-	cursor.close()
-	return standings
+    cursor.execute("select * from Scores")
+    standings=cursor.fetchall()
+    cursor.close()
+    db.close()
+    return standings
 
 
 def reportMatch(winner, loser, tournamentID=""):
@@ -99,6 +103,7 @@ def reportMatch(winner, loser, tournamentID=""):
         cursor.execute("INSERT INTO Matches (winner, loser, tournamentID) VALUES(%s, %s, %s);", (winner, loser, 0))
     db.commit()
     cursor.close()
+    db.close()
 	
 def swissPairings():
      """Returns a list of pairs of players for the next round of a match.
@@ -134,4 +139,5 @@ def swissPairings():
         player1=standings.pop()
         matchesList.append((player1[0], player1[1], 0, 'BI'))
         reportMatch(player1[0], 0)
+     db.close()
      return matchesList
