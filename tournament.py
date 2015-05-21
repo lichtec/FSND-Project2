@@ -48,29 +48,29 @@ def countPlayers():
     return playerCount
 
 
-def registerPlayer(PlayerName, tournamentID=""):
+def registerPlayer(player_name, tournament_id=""):
     """Adds a player to the tournament database.
   
     The database assigns a unique serial id number for the player.  (This
     should be handled by your SQL database schema, not in your Python code.)
   
     Args:
-      PlayerName: the player's  name (need not be unique).
-      tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
+      player_name: the player's  name (need not be unique).
+      tournament_id: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
 
     """
     db = connect()
     cursor = db.cursor()
     #Different decisiions based on the tournament id. Using 0 as a standard blank tournament that's included in my sql
-    if tournamentID != "":
-        cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, tournamentID))
+    if tournament_id != "":
+        cursor.execute("INSERT INTO Players (player_name, tournament_id) VALUES(%s, %s);", (player_name, tournament_id))
     else:
-        cursor.execute("INSERT INTO Players (PlayerName, TournamentID) VALUES(%s, %s);", (PlayerName, 0))
+        cursor.execute("INSERT INTO Players (player_name, tournament_id) VALUES(%s, %s);", (player_name, 0))
     db.commit()
     cursor.close()
     db.close()
 	
-def playerStandings():
+def playerStandings(tourn):
     """Returns a list of the players and their win records, sorted by wins.
         The first entry in the list should be the player in first place, or a player
         tied for first place if there is currently a tie.
@@ -91,21 +91,21 @@ def playerStandings():
     return standings
 
 
-def reportMatch(winner, loser, tournamentID=""):
+def reportMatch(winner, loser, tournament_id=""):
     """Records the outcome of a single match between two players.
         Args:
             winner:  the id number of the player who won
             loser:  the id number of the player who lost
-            tournamentID: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
+            tournament_id: the unique id of the tournament the player is in, not required at this point, will have to build some way to provide ref error.
     """
 
     db = connect()
     cursor = db.cursor()
     #Different decisiions based on the tournament id. Using 0 as a standard blank tournament that's included in my sql
-    if tournamentID != "":
-        cursor.execute("INSERT INTO Matches (winner, loser, tournamentID) VALUES(%s, %s, %s);", (winner, loser, tournamentID))
+    if tournament_id != "":
+        cursor.execute("INSERT INTO Matches (winner, loser, tournament_id) VALUES(%s, %s, %s);", (winner, loser, tournament_id))
     else:
-        cursor.execute("INSERT INTO Matches (winner, loser, tournamentID) VALUES(%s, %s, %s);", (winner, loser, 0))
+        cursor.execute("INSERT INTO Matches (winner, loser, tournament_id) VALUES(%s, %s, %s);", (winner, loser, 0))
     db.commit()
     cursor.close()
     db.close()
