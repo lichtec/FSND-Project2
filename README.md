@@ -5,11 +5,11 @@ Udacity Full Stack Nanodegree Project2. Creating a database to handle Swiss-pair
 
 ##Requirements:
 
-*It should be noted to actually use this, you will need to have postgresql installed along with psycopg2.
+* It should be noted to actually use this, you will need to have postgresql installed along with psycopg2.
 
 ##Build Dependencies:
 
-*This code requires python 2.7. To run the application you'll need to have tournament.py and you'll need to run tournament.sql to create the tables and the DB. 
+* This code requires python 2.7. To run the application you'll need to have tournament.py and you'll need to run tournament.sql to create the tables and the DB. 
 
 ##To Run:
 
