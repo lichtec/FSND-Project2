@@ -10,7 +10,7 @@ def connect():
     try:
 		conn = psycopg2.connect("dbname=tournament")
 		return conn
-	except psycopg2.Error as e:
+    except psycopg2.Error as e:
 		print e
 	
 
@@ -70,7 +70,7 @@ def registerPlayer(player_name, tournament_id=""):
     cursor.close()
     db.close()
 	
-def playerStandings(tourn):
+def playerStandings(tournament_id=""):
     """Returns a list of the players and their win records, sorted by wins.
         The first entry in the list should be the player in first place, or a player
         tied for first place if there is currently a tie.
@@ -84,7 +84,10 @@ def playerStandings(tourn):
     db = connect()
     cursor = db.cursor()
     #playerStandings utilizes the the scores view to show current standings
-    cursor.execute("select * from Scores")
+    if tournament_id == "":
+        cursor.execute("SELECT id, player_name, wins, matches FROM scores WHERE tournament_id=0;")
+    else:
+        cursor.execute("SELECT id, player_name, wins, matches FROM scores WHERE tournament_id=%s;", (tournament_id))
     standings=cursor.fetchall()
     cursor.close()
     db.close()
