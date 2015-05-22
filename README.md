@@ -22,3 +22,6 @@ Udacity Full Stack Nanodegree Project2. Creating a database to handle Swiss-pair
 4. When connected to tournament, run `/i tournament.sql` to create all the necessary tables and views.
 
 5. You can now run the tournament python methods as necessary. 
+
+##A Note Regarding Multiple Tournaments
+Using multiple tournaments is possible but you can choose not to use it. If you don't specify a tournament then the functions wil reference the default tournament. To add an additional tournament use the NewTournament() function.
