@@ -15,10 +15,13 @@ Udacity Full Stack Nanodegree Project2. Creating a database to handle Swiss-pair
 
 1. To run the application you'll need to move tournament.py and tournament.sql to same folder and startup psql.
 
-2. When psql is running, run the following command '<CREAT DATABASE tournament;>'
+2. When psql is running, run the following command `CREAT DATABASE tournament;`
 
-3. Once the database has been created run '</c tournament;>' to connect to the new database.
+3. Once the database has been created run `/c tournament;` to connect to the new database.
 
-4. When connected to tournament, run '</i tournament.sql>' to create all the necessary tables and views.
+4. When connected to tournament, run `/i tournament.sql` to create all the necessary tables and views.
 
 5. You can now run the tournament python methods as necessary. 
+
+##A Note Regarding Multiple Tournaments
+Using multiple tournaments is possible but you can choose not to use it. If you don't specify a tournament then the functions wil reference the default tournament. To add an additional tournament use the NewTournament() function.
