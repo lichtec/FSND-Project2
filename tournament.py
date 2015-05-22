@@ -12,7 +12,26 @@ def connect():
 		return conn
     except psycopg2.Error as e:
 		print e
-	
+
+def newTournament(tournament_name="", sport=""):
+    db = connect()
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO tournaments (tournament_name, sport) VALUES(%s, %s);", (tournament_name, sport))
+    db.commit()
+    cursor.execute("SELECT tournament_id FROM tournaments ORDER BY tournament_id DESC")
+    newTournamentID = cursor.fetchone()
+    cursor.close()
+    db.close()
+    return "New Tournament ID is {0}".format(newTournamentID[0])
+
+def listTournaments():
+    db = connect()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM tournaments;")
+    tournaments = cursor.fetchall()
+    cursor.close()
+    db.close()
+    return tournaments
 
 
 def deleteMatches():
